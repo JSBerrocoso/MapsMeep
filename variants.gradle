@@ -1,0 +1,24 @@
+project.ext {
+
+    // Android
+    minSdkVersion = 21
+    compileSdkVersion = 30
+    targetSdkVersion = 30
+    buildToolsVersion = "30.0.2"
+
+    // App
+    versionCode = 1
+    versionName = "1.0.0"
+    appName = "MapsTest"
+    applicationId = "com.jsbs87.android.app.mapsmeep"
+
+    //Keys
+    baseUrl = [debug     : "https://apidev.meep.me/tripplan/api/v1/",
+               prerelease: "https://apidev.meep.me/tripplan/api/v1/",
+               release   : "https://apidev.meep.me/tripplan/api/v1/"]
+
+    googleMapsKey = [debug     : "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI",
+                     prerelease: "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI",
+                     release   : "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI"]
+
+}
