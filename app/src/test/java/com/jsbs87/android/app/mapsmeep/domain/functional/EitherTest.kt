@@ -1,7 +1,6 @@
 package com.jsbs87.android.app.mapsmeep.domain.functional
 
 import com.jsbs87.android.app.mapsmeep.UnitTest
-import com.jsbs87.android.omtest.app.domain.functional.Either
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldEqualTo

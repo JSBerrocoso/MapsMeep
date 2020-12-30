@@ -14,16 +14,11 @@ project.ext {
 
 
     baseUrl = [debug     : "https://apidev.meep.me/tripplan/api/v1/",
-               prerelease: "https://apidev.meep.me/tripplan/api/v1/",
                release   : "https://apidev.meep.me/tripplan/api/v1/"]
 
-    googleMapsKey = [debug     : "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI",
-                     prerelease: "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI",
-                     release   : "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI"]
-
     defaultCity = "lisboa"
-    defaultLatLocation = "38.7436057"
-    defaultLngLocation = "-9.2302432"
+    defaultLatLocation = "38.7121023"
+    defaultLngLocation = "-9.1416262"
 
     defaultZoom = 15
 }

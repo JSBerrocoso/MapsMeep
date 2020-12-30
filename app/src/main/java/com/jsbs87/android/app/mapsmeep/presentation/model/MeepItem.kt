@@ -9,23 +9,19 @@ class MeepItem(
     title: String,
     val companyZoneId: Int
 ) : ClusterItem {
-    private val position: LatLng
-    private val title: String
+    private val position: LatLng = LatLng(lat, lng)
+    private val title: String = title
 
     override fun getPosition(): LatLng {
         return position
     }
 
-    override fun getTitle(): String? {
+    override fun getTitle(): String{
         return title
     }
 
-    override fun getSnippet(): String? {
+    override fun getSnippet(): String {
         return ""
     }
 
-    init {
-        position = LatLng(lat, lng)
-        this.title = title
-    }
 }

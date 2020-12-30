@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android-extensions'
 apply from: "$rootDir/ktlint.gradle"
 
 def BASE_URL = "BASE_URL"
-def GOOGLE_MAPS_KEY = "GOOGLE_MAPS_KEY"
 def DEFAULT_CITY = "DEFAULT_CITY"
 def DEFAULT_ZOOM = "DEFAULT_ZOOM"
 def DEFAULT_LAT_LOCATION = "DEFAULT_LAT_LOCATION"
@@ -24,6 +23,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
     buildTypes {
 
         debug {
@@ -32,20 +40,17 @@ android {
             resValue "string", "app_label", "MapsMeep[D]"
         }
 
-        prerelease {
-            debuggable true
-            minifyEnabled false
-            applicationIdSuffix ".prerelease"
-            signingConfig signingConfigs.debug
-            resValue "string", "app_label", "MapsMeep[P]"
-        }
-
         release {
             resValue "string", "app_label", "MapsMeep"
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -56,13 +61,10 @@ android {
 
     applicationVariants.all { variant ->
         setVariantBuildConfigField(variant, baseUrl, BASE_URL, STRING)
-        setVariantBuildConfigField(variant, googleMapsKey, GOOGLE_MAPS_KEY, STRING)
         setVariantBuildConfigField(variant, defaultCity, DEFAULT_CITY, STRING)
         setVariantBuildConfigField(variant, defaultZoom, DEFAULT_ZOOM, INT)
         setVariantBuildConfigField(variant, defaultLatLocation, DEFAULT_LAT_LOCATION, STRING)
         setVariantBuildConfigField(variant, defaultLngLocation, DEFAULT_LNG_LOCATION, STRING)
-
-
     }
 }
 

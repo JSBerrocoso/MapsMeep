@@ -8,7 +8,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.jsbs87.android.app.mapsmeep.R
 import com.jsbs87.android.app.mapsmeep.domain.exception.Failure
-import com.jsbs87.android.app.mapsmeep.presentation.dialog.LoadingDialog
 import com.jsbs87.android.app.mapsmeep.presentation.extension.gone
 import com.jsbs87.android.app.mapsmeep.presentation.extension.visible
 import com.jsbs87.android.app.mapsmeep.presentation.util.LoadingHandler
@@ -37,31 +36,12 @@ abstract class BaseActivity : AppCompatActivity(), LoadingHandler {
             .show()
     }
 
-    fun showGenericError() {
-        showAlertDialog(
-            getString(R.string.title_generic_error),
-            getString(R.string.message_generic_error)
-        )
-    }
-
     override fun showLoading() {
         ll_loading.visible()
     }
 
     override fun hideLoading() {
         ll_loading.gone()
-    }
-
-    @SuppressLint("RestrictedApi")
-    fun setOnBackButtonToolbar(enable: Boolean, toolbar: Toolbar) {
-        supportActionBar?.setDefaultDisplayHomeAsUpEnabled(enable)
-        supportActionBar?.setDisplayHomeAsUpEnabled(enable)
-        supportActionBar?.setDisplayShowHomeEnabled(enable)
-        if (enable) {
-            toolbar.setNavigationOnClickListener {
-                onBackPressed()
-            }
-        }
     }
 
     open fun handleLoading(showLoading: Boolean?) {
@@ -87,8 +67,10 @@ abstract class BaseActivity : AppCompatActivity(), LoadingHandler {
         }
     }
 
-    fun showSnackBar(text: String) {
+    private fun showSnackBar(text: String) {
         Snackbar.make(toolbar, text, Snackbar.LENGTH_LONG).show()
     }
+
+    abstract fun refresh()
 
 }

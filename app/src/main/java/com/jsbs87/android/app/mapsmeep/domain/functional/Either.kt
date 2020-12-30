@@ -1,4 +1,4 @@
-package com.jsbs87.android.omtest.app.domain.functional
+package com.jsbs87.android.app.mapsmeep.domain.functional
 
 /**
  * Represents a value of one of two possible types (a disjoint union).

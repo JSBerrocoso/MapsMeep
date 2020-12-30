@@ -1,7 +1,6 @@
 package com.jsbs87.android.app.mapsmeep.data.api
 
 import com.jsbs87.android.app.mapsmeep.data.entity.ResourceEntity
-import com.jsbs87.android.app.mapsmeep.data.entity.ResponseEntity
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -11,7 +11,6 @@ sealed class Failure( var message: String? = null) {
 
     object NetworkConnection : Failure()
     object ServerError : Failure()
-    object GeResourcesError : Failure()
 
     abstract class FeatureFailure(message: String? = null) : Failure(message) {
 

@@ -3,7 +3,7 @@ package com.jsbs87.android.app.mapsmeep.domain
 import com.jsbs87.android.app.mapsmeep.domain.exception.Failure
 import com.jsbs87.android.app.mapsmeep.domain.interactors.UseCase
 import com.jsbs87.android.app.mapsmeep.AndroidTest
-import com.jsbs87.android.omtest.app.domain.functional.Either
+import com.jsbs87.android.app.mapsmeep.domain.functional.Either
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.shouldEqual
 import org.junit.Test

@@ -7,12 +7,10 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.maps.android.clustering.ClusterManager
 import com.jsbs87.android.app.mapsmeep.BuildConfig
 import com.jsbs87.android.app.mapsmeep.R
-import com.jsbs87.android.app.mapsmeep.domain.model.Resource
 import com.jsbs87.android.app.mapsmeep.presentation.extension.failure
 import com.jsbs87.android.app.mapsmeep.presentation.extension.observe
 import com.jsbs87.android.app.mapsmeep.presentation.model.MeepItem
@@ -24,13 +22,13 @@ import org.koin.android.ext.android.inject
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 
-class MapsActivity : BaseActivity(), OnMapReadyCallback {
+class MapsActivity : BaseActivity(), OnMapReadyCallback, GoogleMap.OnCameraMoveListener {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private lateinit var clusterManager: ClusterManager<MeepItem>
     private lateinit var map: GoogleMap
     private val viewModel by lifecycleScope.viewModel<MapsViewModel>(this)
-    private val defaultPosition:  LatLng by inject()
+    private val defaultPosition: LatLng by inject()
 
     override fun layoutId() = R.layout.activity_maps
 
@@ -57,15 +55,6 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        map.setOnCameraMoveListener {
-            if (!viewModel.isLoading()) {
-                viewModel.loadResources(
-                    BuildConfig.DEFAULT_CITY,
-                    map.projection.visibleRegion.latLngBounds.northeast,
-                    map.projection.visibleRegion.latLngBounds.southwest
-                )
-            }
-        }
         clusterManager = ClusterManager(this, map)
         clusterManager.renderer = CustomClusterRenderer(this, map, clusterManager)
         clusterManager.setOnClusterItemClickListener {
@@ -74,6 +63,7 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
             true
         }
 
+        map.setOnCameraMoveListener(this)
         map.setOnCameraIdleListener(clusterManager)
         map.setOnMarkerClickListener(clusterManager)
         map.animateCamera(
@@ -82,6 +72,27 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
                 BuildConfig.DEFAULT_ZOOM.toFloat()
             )
         )
+    }
+
+    override fun refresh() {
+        if (!viewModel.isLoading()) {
+            if (this::map.isInitialized) {
+
+                val lowerLeftLatLon = map.projection.visibleRegion.latLngBounds.northeast
+                val upperRightLatLon = map.projection.visibleRegion.latLngBounds.southwest
+
+                if ((lowerLeftLatLon.latitude == 0.0 && lowerLeftLatLon.longitude == 0.0).not()) {
+                    viewModel.loadResources(
+                        BuildConfig.DEFAULT_CITY, lowerLeftLatLon, upperRightLatLon
+                    )
+                }
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        refresh()
     }
 
     private fun populateBottomPanel(itemSelected: MeepItem) {
@@ -93,9 +104,11 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
     private fun handleResources(resources: List<MeepItem>?) {
         clusterManager.clearItems()
-        resources?.map {
-            clusterManager.addItem(it)
-        }
+        clusterManager.addItems(resources)
+    }
+
+    override fun onCameraMove() {
+        refresh()
     }
 
 }

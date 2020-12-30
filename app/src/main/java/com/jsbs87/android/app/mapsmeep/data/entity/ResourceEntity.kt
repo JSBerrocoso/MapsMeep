@@ -15,11 +15,9 @@ data class ResourceEntity(
 ) {
 
     fun toResource() =
-        Resource(id, name, x, y, scheduledArrival, locationType, companyZoneId, lat, lon)
+        Resource(name, companyZoneId, lat, lon)
 
     companion object {
-        fun empty() = Resource(
-            "0", "", 0.0, 0.0, 0, 0, 0, 0.0, 0.0
-        )
+        fun empty() = Resource("", 0, 0.0, 0.0)
     }
 }

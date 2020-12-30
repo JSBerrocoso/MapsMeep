@@ -1,7 +1,7 @@
 package com.jsbs87.android.app.mapsmeep.domain.interactors
 
 import com.jsbs87.android.app.mapsmeep.domain.exception.Failure
-import com.jsbs87.android.omtest.app.domain.functional.Either
+import com.jsbs87.android.app.mapsmeep.domain.functional.Either
 import kotlinx.coroutines.*
 
 abstract class UseCase<out Type, in Params> where Type : Any {

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">MapsMeepTest</string>
-    <string name="title_activity_maps">@string/app_name</string>
+    <string name="title_activity_maps">MapsMeepTest</string>
     <string name="loading">Cargando...</string>
     <string name="ok">Ok</string>
     <string name="title_generic_error">Se ha producido un error</string>
