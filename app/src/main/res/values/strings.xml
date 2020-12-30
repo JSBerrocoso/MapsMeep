@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MapsMeepTest</string>
+    <string name="title_activity_maps">MapsMeepTest</string>
+    <string name="loading">Cargando...</string>
+    <string name="ok">Ok</string>
+    <string name="title_generic_error">Se ha producido un error</string>
+    <string name="message_generic_error">Se ha producido un error, inténtelo de nuevo</string>
+    <string name="server_error">Error de conexión con el servidor</string>
+    <string name="network_error">No hay conexión</string>
+    <string name="name_format">Name: %s</string>
+    <string name="company_zone_id_format">CompanyZoneId: %s</string>
+</resources>

@@ -1,0 +1,101 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply from: "$rootDir/ktlint.gradle"
+
+def BASE_URL = "BASE_URL"
+def DEFAULT_CITY = "DEFAULT_CITY"
+def DEFAULT_ZOOM = "DEFAULT_ZOOM"
+def DEFAULT_LAT_LOCATION = "DEFAULT_LAT_LOCATION"
+def DEFAULT_LNG_LOCATION = "DEFAULT_LNG_LOCATION"
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        applicationId "com.jsbs87.android.app.mapsmeep"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode  generateAutoVersionCode(rootProject.ext.versionCode)
+        versionName rootProject.ext.versionName
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("debug.keystore")
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+    }
+
+    buildTypes {
+
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
+            resValue "string", "app_label", "MapsMeep[D]"
+        }
+
+        release {
+            resValue "string", "app_label", "MapsMeep"
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    applicationVariants.all { variant ->
+        setVariantBuildConfigField(variant, baseUrl, BASE_URL, STRING)
+        setVariantBuildConfigField(variant, defaultCity, DEFAULT_CITY, STRING)
+        setVariantBuildConfigField(variant, defaultZoom, DEFAULT_ZOOM, INT)
+        setVariantBuildConfigField(variant, defaultLatLocation, DEFAULT_LAT_LOCATION, STRING)
+        setVariantBuildConfigField(variant, defaultLngLocation, DEFAULT_LNG_LOCATION, STRING)
+    }
+}
+
+dependencies {
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "androidx.core:core-ktx:$android_core_version"
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "com.google.android.material:material:$material_version"
+    implementation "com.google.android.gms:play-services-maps:$play_services_maps_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "com.google.maps.android:maps-utils-ktx:$mapsUtilsKtx_version"
+    // DI
+    implementation "org.koin:koin-android:$koin_version"
+    implementation "org.koin:koin-android-viewmodel:$koin_version"
+
+    // API REST
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitconverter_version"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
+
+    // TEST
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.ext:junit:$junitext_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$expressocore_version"
+
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
+    testImplementation "com.nhaarman:mockito-kotlin:$mockitokotlin_version"
+    testImplementation "org.amshove.kluent:kluent:$kluent_version"
+
+}
