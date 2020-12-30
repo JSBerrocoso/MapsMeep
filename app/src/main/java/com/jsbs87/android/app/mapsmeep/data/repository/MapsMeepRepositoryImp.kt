@@ -12,21 +12,15 @@ import com.jsbs87.android.omtest.app.domain.functional.Either
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import retrofit2.Call
+import kotlin.jvm.Throws
 
 class MapsMeepRepositoryImp(
     private val apiService: MapsMeepApiService,
-    private val networkHandler: NetworkHandler
-) : MapsMeepRepository {
+    private val networkHandler: NetworkHandler) : MapsMeepRepository {
 
-    override suspend fun getResources(
-        city: String,
-        lowerLeftLatLon: LatLng,
-        upperRightLatLon: LatLng
-    ): Either<Failure, List<Resource>> {
-        val lowerLeftLatLon =
-            lowerLeftLatLon.latitude.toString() + "," + lowerLeftLatLon.longitude.toString()
-        val upperRightLatLon =
-            upperRightLatLon.latitude.toString() + "," + upperRightLatLon.longitude.toString()
+    override suspend fun getResources(city: String, lowerLeftLatLon: LatLng, upperRightLatLon: LatLng): Either<Failure, List<Resource>> {
+        val lowerLeftLatLon  = lowerLeftLatLon.latitude.toString()+","+lowerLeftLatLon.longitude.toString()
+        val upperRightLatLon = upperRightLatLon.latitude.toString()+","+upperRightLatLon.longitude.toString()
         return when (networkHandler.isInternetAvailable()) {
             true ->
                 request(
@@ -37,17 +31,15 @@ class MapsMeepRepositoryImp(
         }
     }
 
-
     private fun <T, R> request(
-        call: Call<ResponseEntity<T>>,
+        call: Call<T>,
         transform: (T) -> R,
         default: T
     ): Either<Failure, R> {
         return try {
             val response = call.execute()
             when (response.isSuccessful) {
-                true -> Either.Right(transform((response.body()?.response ?: default)))
-                false -> Either.Left(getFailure(response.errorBody()))
+                true -> Either.Right(transform((response.body() ?: default)))
                 else -> Either.Left(getFailure(response.errorBody()))
             }
         } catch (exception: Throwable) {

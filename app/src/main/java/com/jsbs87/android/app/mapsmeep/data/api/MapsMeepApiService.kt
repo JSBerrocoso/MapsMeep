@@ -14,6 +14,6 @@ interface MapsMeepApiService {
         @Path("city") city: String,
         @Query("lowerLeftLatLon") lowerLeftLatLon: String,
         @Query("upperRightLatLon") upperRightLatLon: String
-    ): Call<ResponseEntity<List<ResourceEntity>>>
+    ): Call<List<ResourceEntity>>
 
 }

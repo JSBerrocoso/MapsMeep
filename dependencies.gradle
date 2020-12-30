@@ -6,7 +6,7 @@ ext {
     play_services_maps_version = '17.0.0'
     constraintlayout_version = '2.0.4'
     kotlinx_coroutines_core_version = '1.4.2'
-
+    lifecycle_version = '2.2.0'
     //DI
     koin_version = '2.1.5'
 
@@ -14,7 +14,7 @@ ext {
     retrofitconverter_version = '2.7.1'
     okhttp3_version = '4.9.0'
 
-    // TES
+    // TEST
     junit_version = '4.13.1'
     junitext_version = '1.1.2'
     expressocore_version = '3.3.0'

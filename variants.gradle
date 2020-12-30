@@ -12,7 +12,7 @@ project.ext {
     appName = "MapsTest"
     applicationId = "com.jsbs87.android.app.mapsmeep"
 
-    //Keys
+
     baseUrl = [debug     : "https://apidev.meep.me/tripplan/api/v1/",
                prerelease: "https://apidev.meep.me/tripplan/api/v1/",
                release   : "https://apidev.meep.me/tripplan/api/v1/"]
@@ -21,4 +21,7 @@ project.ext {
                      prerelease: "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI",
                      release   : "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI"]
 
+    defaultCity = "lisboa"
+
+    defaultZoom = 15
 }

@@ -5,6 +5,8 @@ apply from: "$rootDir/ktlint.gradle"
 
 def BASE_URL = "BASE_URL"
 def GOOGLE_MAPS_KEY = "GOOGLE_MAPS_KEY"
+def DEFAULT_CITY = "DEFAULT_CITY"
+def DEFAULT_ZOOM = "DEFAULT_ZOOM"
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -24,7 +26,6 @@ android {
 
         debug {
             debuggable true
-            applicationIdSuffix ".debug"
             signingConfig signingConfigs.debug
             resValue "string", "app_label", "MapsMeep[D]"
         }
@@ -54,6 +55,8 @@ android {
     applicationVariants.all { variant ->
         setVariantBuildConfigField(variant, baseUrl, BASE_URL, STRING)
         setVariantBuildConfigField(variant, googleMapsKey, GOOGLE_MAPS_KEY, STRING)
+        setVariantBuildConfigField(variant, defaultCity, DEFAULT_CITY, STRING)
+        setVariantBuildConfigField(variant, defaultZoom, DEFAULT_ZOOM, INT)
     }
 }
 
@@ -66,6 +69,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-maps:$play_services_maps_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_core_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
     // DI
     implementation "org.koin:koin-android:$koin_version"
