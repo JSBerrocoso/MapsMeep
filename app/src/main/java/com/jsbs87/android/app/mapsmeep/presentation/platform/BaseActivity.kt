@@ -20,7 +20,10 @@ abstract class BaseActivity : AppCompatActivity(), LoadingHandler {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(layoutId())
+        initUI()
     }
+
+    abstract fun initUI()
 
     abstract fun layoutId(): Int
 

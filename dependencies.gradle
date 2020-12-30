@@ -7,6 +7,8 @@ ext {
     constraintlayout_version = '2.0.4'
     kotlinx_coroutines_core_version = '1.4.2'
     lifecycle_version = '2.2.0'
+    mapsUtilsKtx_version = '2.2.0'
+
     //DI
     koin_version = '2.1.5'
 
@@ -18,5 +20,8 @@ ext {
     junit_version = '4.13.1'
     junitext_version = '1.1.2'
     expressocore_version = '3.3.0'
+    robolectric_version = '3.8'
+    mockitokotlin_version = '1.4.0'
+    kluent_version = '1.14'
 
 }

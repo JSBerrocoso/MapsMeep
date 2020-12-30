@@ -22,6 +22,8 @@ project.ext {
                      release   : "AIzaSyAGd1yAAy2lkFqI_P6esJsy-eiwXaChCKI"]
 
     defaultCity = "lisboa"
+    defaultLatLocation = "38.7436057"
+    defaultLngLocation = "-9.2302432"
 
     defaultZoom = 15
 }

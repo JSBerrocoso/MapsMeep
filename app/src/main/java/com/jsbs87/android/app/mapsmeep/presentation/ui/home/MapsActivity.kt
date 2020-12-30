@@ -1,27 +1,36 @@
 package com.jsbs87.android.app.mapsmeep.presentation.ui.home
 
 import android.os.Bundle
+import android.view.View
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.maps.android.clustering.ClusterManager
 import com.jsbs87.android.app.mapsmeep.BuildConfig
 import com.jsbs87.android.app.mapsmeep.R
 import com.jsbs87.android.app.mapsmeep.domain.model.Resource
 import com.jsbs87.android.app.mapsmeep.presentation.extension.failure
 import com.jsbs87.android.app.mapsmeep.presentation.extension.observe
+import com.jsbs87.android.app.mapsmeep.presentation.model.MeepItem
 import com.jsbs87.android.app.mapsmeep.presentation.platform.BaseActivity
+import com.jsbs87.android.app.mapsmeep.presentation.util.maputils.CustomClusterRenderer
 import kotlinx.android.synthetic.main.activity_maps.*
+import kotlinx.android.synthetic.main.bottom_sheet_content_view.*
+import org.koin.android.ext.android.inject
 import org.koin.android.scope.lifecycleScope
 import org.koin.android.viewmodel.scope.viewModel
 
 class MapsActivity : BaseActivity(), OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
-
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
+    private lateinit var clusterManager: ClusterManager<MeepItem>
+    private lateinit var map: GoogleMap
     private val viewModel by lifecycleScope.viewModel<MapsViewModel>(this)
+    private val defaultPosition:  LatLng by inject()
 
     override fun layoutId() = R.layout.activity_maps
 
@@ -29,41 +38,64 @@ class MapsActivity : BaseActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setSupportActionBar(toolbar)
 
-        val mapFragment = supportFragmentManager
-            .findFragmentById(R.id.map) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
         observe(viewModel.resources, ::handleResources)
         observe(viewModel.loading, ::handleLoading)
         failure(viewModel.failure, ::showError)
     }
 
-    private fun handleResources(resources: List<Resource>?) {
-        resources?.map {
-            val poi = LatLng(it.lat, it.lon)
-            mMap.addMarker(MarkerOptions().position(poi).title(it.name))
-        }
+    override fun initUI() {
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        bottomSheetBehavior = BottomSheetBehavior.from(ll_bottom_sheet)
+        bottomSheetBehavior.isDraggable = false
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.setPeekHeight(0, true)
+
     }
 
-
     override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
-        val sydney = LatLng(38.7436057, -9.2302432)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Lisboa"))
-        mMap.moveCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                sydney,
-                BuildConfig.DEFAULT_ZOOM.toFloat()
-            )
-        )
-        mMap.setOnCameraMoveListener {
+        map = googleMap
+        map.setOnCameraMoveListener {
             if (!viewModel.isLoading()) {
                 viewModel.loadResources(
                     BuildConfig.DEFAULT_CITY,
-                    mMap.projection.visibleRegion.latLngBounds.northeast,
-                    mMap.projection.visibleRegion.latLngBounds.southwest
+                    map.projection.visibleRegion.latLngBounds.northeast,
+                    map.projection.visibleRegion.latLngBounds.southwest
                 )
             }
         }
+        clusterManager = ClusterManager(this, map)
+        clusterManager.renderer = CustomClusterRenderer(this, map, clusterManager)
+        clusterManager.setOnClusterItemClickListener {
+            map.animateCamera(CameraUpdateFactory.newLatLng(it.position))
+            populateBottomPanel(it)
+            true
+        }
+
+        map.setOnCameraIdleListener(clusterManager)
+        map.setOnMarkerClickListener(clusterManager)
+        map.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                defaultPosition,
+                BuildConfig.DEFAULT_ZOOM.toFloat()
+            )
+        )
     }
+
+    private fun populateBottomPanel(itemSelected: MeepItem) {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
+        txtName.text = getString(R.string.name_format, itemSelected.title)
+        txtCompanyZoneId.text =
+            getString(R.string.company_zone_id_format, itemSelected.companyZoneId.toString())
+    }
+
+    private fun handleResources(resources: List<MeepItem>?) {
+        clusterManager.clearItems()
+        resources?.map {
+            clusterManager.addItem(it)
+        }
+    }
+
 }
